@@ -9,7 +9,7 @@ interface SentenceProps extends HasKey {
 function Sentence({ sentence, key }: SentenceProps) {
   const issues = new IssueList();
   // .replace(/[-,:;]/g, "")
-  const words = sentence.split(/[ ]+/g);
+  const words = sentence.split(/[ ]+/g).filter((x) => x);
   if (words.length > 20) {
     issues.addIssue(
       "Long sentence",
@@ -28,6 +28,7 @@ function Sentence({ sentence, key }: SentenceProps) {
       {words.map((word, index) => (
         <Word word={word} key={index} />
       ))}
+      <Word word={"."} issues={issues} />
     </Fragment>
   );
 }

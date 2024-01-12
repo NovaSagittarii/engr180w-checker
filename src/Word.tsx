@@ -6,13 +6,14 @@ import IssueList from "./IssueList";
 
 interface WordProps extends HasKey {
   word: string;
+  issues?: IssueList;
 }
 
-function Word({ word, key }: WordProps) {
+function Word({ word, key, issues }: WordProps) {
   const [severity, setSeverity] = useState(-1);
   const [issueList, setIssueList] = useState(new IssueList());
   useEffect(() => {
-    const issues = new IssueList();
+    if (!issues) issues = new IssueList();
     if (word.length > 12) {
       issues.addIssue(
         "Long word",
@@ -24,7 +25,7 @@ function Word({ word, key }: WordProps) {
     }
     setSeverity(Math.min(issues.getIssues().length, 1));
     setIssueList(issues);
-  }, [word]);
+  }, [word, issues]);
   return (
     <div
       className={`group p-1 w-fit ${

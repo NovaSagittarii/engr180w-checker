@@ -9,7 +9,10 @@ function Editor() {
   }, [content]);
   return (
     <div>
-      <textarea onChange={(event) => setContent(event.target.value)} />
+      <textarea
+        onChange={(event) => setContent(event.target.value)}
+        className='w-full border border-black'
+      />
       {paragraphText.map((paragraph, index) => (
         <Paragraph paragraph={paragraph} key={index} />
       ))}
