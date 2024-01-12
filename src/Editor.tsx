@@ -1,1 +1,20 @@
-function Editor() {}
+import { useEffect, useState } from "react";
+import Paragraph from "./Paragraph";
+
+function Editor() {
+  const [content, setContent] = useState("");
+  const [paragraphText, setParagraphText] = useState<string[]>([]);
+  useEffect(() => {
+    setParagraphText(content.split(/\n+/));
+  }, [content]);
+  return (
+    <div>
+      <textarea onChange={(event) => setContent(event.target.value)} />
+      {paragraphText.map((paragraph, index) => (
+        <Paragraph paragraph={paragraph} key={index} />
+      ))}
+    </div>
+  );
+}
+
+export default Editor;
