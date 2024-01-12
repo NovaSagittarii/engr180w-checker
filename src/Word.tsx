@@ -7,9 +7,10 @@ import IssueList from "./IssueList";
 interface WordProps extends HasKey {
   word: string;
   issues?: IssueList;
+  className?: string;
 }
 
-function Word({ word, key, issues }: WordProps) {
+function Word({ word, key, issues, className = "" }: WordProps) {
   const [severity, setSeverity] = useState(-1);
   const [issueList, setIssueList] = useState(new IssueList());
   useEffect(() => {
@@ -28,7 +29,7 @@ function Word({ word, key, issues }: WordProps) {
   }, [word, issues]);
   return (
     <div
-      className={`group p-1 w-fit ${
+      className={`group p-1 w-fit ${className} ${
         severity > 0 ? "text-red-700 hover:bg-red-700 hover:text-white" : ""
       }`}
       key={key}

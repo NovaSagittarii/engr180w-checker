@@ -26,7 +26,11 @@ function Sentence({ sentence, key }: SentenceProps) {
   return (
     <Fragment key={key}>
       {words.map((word, index) => (
-        <Word word={word} key={index} />
+        <Word
+          word={word}
+          key={index}
+          className={issues.hasIssue() ? "border-b border-red-700" : ""}
+        />
       ))}
       <Word word={"."} issues={issues} />
     </Fragment>

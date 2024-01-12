@@ -20,6 +20,9 @@ class IssueList {
     } as IssueItem;
     this.issues.push(newIssue);
   }
+  public hasIssue(): boolean {
+    return this.issues.length > 0;
+  }
 }
 
 export default IssueList;
