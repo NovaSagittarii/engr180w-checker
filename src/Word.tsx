@@ -36,7 +36,7 @@ function Word({ word, key, issues, className = "" }: WordProps) {
     >
       {word}
       {issueList.getIssues().length > 0 && (
-        <div className='absolute bg-white/80 border border-black rounded-md text-black group-hover:block hidden'>
+        <div className='absolute bg-white p-2 border border-black rounded-md text-black group-hover:block hidden'>
           <IssueListing issues={issueList} />
         </div>
       )}
