@@ -9,10 +9,19 @@ import IssueList from "./IssueList";
 interface WordProps extends HasKey {
   word: string;
   issues?: IssueList;
+  /** append additional issues without changing severity (such as showing sentence level issues on the word) */
+  silentIssues?: IssueList;
   className?: string;
 }
 
-function Word({ word, key, issues, className = "" }: WordProps) {
+const HOVER_COLORS: Record<number, string> = {
+  0: "text-yellow-500 hover:bg-yellow-500 hover:text-white",
+  1: "text-orange-500 hover:bg-orange-500 hover:text-white",
+  2: "text-red-500 hover:bg-red-500 hover:text-white",
+  3: "text-red-700 hover:bg-red-700 hover:text-white",
+};
+
+function Word({ word, key, issues, silentIssues, className = "" }: WordProps) {
   const [severity, setSeverity] = useState(-1);
   const [issueList, setIssueList] = useState(new IssueList());
   useEffect(() => {
@@ -29,7 +38,7 @@ function Word({ word, key, issues, className = "" }: WordProps) {
       issues.addIssue(
         "Long word",
         `Word might be able to be replaced with a simpler word. Syllable count = ${syllables}, Expected <= 2`,
-        1,
+        0,
       );
     }
     if (WORD_BAN_LIST[word]) {
@@ -40,15 +49,14 @@ function Word({ word, key, issues, className = "" }: WordProps) {
   }, [word, issues, syllableCount]);
   return (
     <div
-      className={`group p-1 w-fit ${className} ${
-        severity > 0 ? "text-red-700 hover:bg-red-700 hover:text-white" : ""
-      }`}
+      className={`group p-1 w-fit ${className} ${HOVER_COLORS[severity]}`}
       key={key}
     >
       {word}
-      {issueList.getIssues().length > 0 && (
+      {(issueList.hasIssue() || silentIssues?.hasIssue()) && (
         <div className='absolute bg-white p-2 border border-black rounded-md text-black group-hover:block hidden'>
           <IssueListing issues={issueList} />
+          {silentIssues?.hasIssue() && <IssueListing issues={silentIssues} />}
         </div>
       )}
     </div>

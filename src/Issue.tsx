@@ -9,14 +9,25 @@ interface IssueProps extends HasKey {
   severity: Severity;
 }
 
+const BG_COLORS: Record<Severity, string> = {
+  0: "bg-yellow-100",
+  1: "bg-orange-100",
+  2: "bg-red-100",
+  3: "bg-red-100",
+};
+
 function Issue({ label, description, severity, key }: IssueProps) {
   const [active, setActive] = useState(true);
   return (
-    <div className='flex flex-col' key={key}>
-      <div className='font-semibold text-xl'>{label}</div>
+    <div
+      className={`flex flex-col p-1 rounded-sm ${active ? "" : "opacity-50"}`}
+      key={key}
+    >
+      <div className={`font-semibold text-xl ${BG_COLORS[severity]}`}>
+        {label}
+      </div>
       <div>
         <div className='text-black/80 text-base'>{description}</div>
-        <div>sev{severity}</div>
         {active && (
           <button
             className='border border-black'
