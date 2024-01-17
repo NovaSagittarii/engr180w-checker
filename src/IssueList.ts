@@ -23,6 +23,9 @@ class IssueList {
   public hasIssue(): boolean {
     return this.issues.length > 0;
   }
+  public getHighestSeverity(): Severity {
+    return Math.max(...this.issues.map((x) => x.severity)) as Severity;
+  }
 }
 
 export default IssueList;

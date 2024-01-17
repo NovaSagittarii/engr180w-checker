@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { syllableCount } from "syllable-count-english";
+
 import { WORD_BAN_LIST } from "./AnnotatedText";
 import { HasKey } from "./HasKey";
 import { IssueListing } from "./Issue";
@@ -15,18 +17,27 @@ function Word({ word, key, issues, className = "" }: WordProps) {
   const [issueList, setIssueList] = useState(new IssueList());
   useEffect(() => {
     if (!issues) issues = new IssueList();
-    if (word.length > 12) {
+
+    const syllables = syllableCount(word);
+    if (syllables > 3) {
+      issues.addIssue(
+        "Very long word",
+        `Word might be able to be replaced with a simpler word. Syllable count = ${syllables}, Expected <= 2`,
+        2,
+      );
+    } else if (syllables > 2) {
       issues.addIssue(
         "Long word",
-        `Word might be able to be replaced with a simpler word. Length = ${word.length}, Expected <= 12`,
+        `Word might be able to be replaced with a simpler word. Syllable count = ${syllables}, Expected <= 2`,
+        1,
       );
     }
     if (WORD_BAN_LIST[word]) {
       issues.addIssue("Word issue", WORD_BAN_LIST[word]);
     }
-    setSeverity(Math.min(issues.getIssues().length, 1));
+    setSeverity(issues.getHighestSeverity());
     setIssueList(issues);
-  }, [word, issues]);
+  }, [word, issues, syllableCount]);
   return (
     <div
       className={`group p-1 w-fit ${className} ${
