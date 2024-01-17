@@ -27,6 +27,14 @@ function Word({ word, key, issues, silentIssues, className = "" }: WordProps) {
   useEffect(() => {
     if (!issues) issues = new IssueList();
 
+    if (word.length > 12) {
+      issues.addIssue(
+        "Long word",
+        `Word might be able to be replaced with a simpler word. Word length = ${word.length}, Expected <= 12`,
+        2,
+      );
+    }
+
     const syllables = 0; // syllableCount(word);
     if (syllables > 3) {
       issues.addIssue(
