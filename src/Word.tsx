@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { syllableCount } from "syllable-count-english";
+// import { syllableCount } from "syllable-count-english"; // breaks in vite build due to reading system files
 
 import { WORD_BAN_LIST } from "./AnnotatedText";
 import { HasKey } from "./HasKey";
@@ -27,7 +27,7 @@ function Word({ word, key, issues, silentIssues, className = "" }: WordProps) {
   useEffect(() => {
     if (!issues) issues = new IssueList();
 
-    const syllables = syllableCount(word);
+    const syllables = 0; // syllableCount(word);
     if (syllables > 3) {
       issues.addIssue(
         "Very long word",
@@ -46,7 +46,7 @@ function Word({ word, key, issues, silentIssues, className = "" }: WordProps) {
     }
     setSeverity(issues.getHighestSeverity());
     setIssueList(issues);
-  }, [word, issues, syllableCount]);
+  }, [word, issues]);
   return (
     <div
       className={`group p-1 w-fit ${className} ${HOVER_COLORS[severity]}`}
