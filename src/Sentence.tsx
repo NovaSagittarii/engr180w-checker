@@ -2,7 +2,6 @@ import { Fragment, useState } from "react";
 import { HasKey } from "./HasKey";
 import Word from "./Word";
 import IssueList from "./IssueList";
-import { IssueListing } from "./Issue";
 
 interface SentenceProps extends HasKey {
   sentence: string;
@@ -25,7 +24,7 @@ function Sentence({ sentence, key }: SentenceProps) {
       `Length = ${words.length} words, Expected <= 20`,
     );
   }
-  const severity = issues.getHighestSeverity();
+  // const severity = issues.getHighestSeverity();
 
   return (
     <Fragment key={key}>
