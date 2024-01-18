@@ -132,11 +132,12 @@ function AnnotatedText({ text }) {
                 const sentenceStart = match.index + paragraphStart;
                 const sentenceOffset = sentence.length;
                 console.log(sentence, sentence.split(" ").length);
-                if (sentence.split(" ").length >= 20) {
-                    addSuggestion(sentenceStart, sentenceOffset, "Long sentence!");
+                const wordCount = sentence.split(" ").length;
+                if (wordCount > 20) {
+                    addSuggestion(sentenceStart, sentenceOffset, `Long sentence! Words = ${wordCount}, Expected <= 20`);
                 }
-                if (sentence.split(" ").length >= 25) {
-                    addSuggestion(sentenceStart, sentenceOffset, "Very long sentence!");
+                if (wordCount > 25) {
+                    addSuggestion(sentenceStart, sentenceOffset, `Very long sentence! Words = ${wordCount}, Expected <= 25`);
                 }
             }
         }
