@@ -17,7 +17,7 @@ const BG_COLORS: Record<Severity, string> = {
 };
 
 function Issue({ label, description, severity = 0, key }: IssueProps) {
-  const [active, setActive] = useState(true);
+  const [active, _setActive] = useState(true);
   return (
     <div
       className={`flex flex-col p-1 rounded-sm ${active ? "" : "opacity-50"}`}
@@ -28,7 +28,7 @@ function Issue({ label, description, severity = 0, key }: IssueProps) {
       </div>
       <div>
         <div className='text-black/80 text-base'>{description}</div>
-        {active && (
+        {/* {active && (
           <button
             className='border border-black'
             onClick={() => {
@@ -37,7 +37,7 @@ function Issue({ label, description, severity = 0, key }: IssueProps) {
           >
             dismiss
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );
