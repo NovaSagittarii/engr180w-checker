@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import writeGood from "write-good";
 import { Issue } from "./Issue";
+import { syllable } from "syllable";
+import { WORD_BAN_LIST } from "./BannedWords";
 
 interface AnnotatedTextProps {
   /** text to annotate (input) */
@@ -39,13 +41,34 @@ function AnnotatedText({ text }: AnnotatedTextProps) {
         const sentence = match[0];
         const sentenceStart = match.index + paragraphStart;
         const sentenceOffset = sentence.length;
-        console.log(sentence, sentence.split(" ").length);
+        // console.log(sentence, sentence.split(" ").length);
         const wordCount = sentence.split(" ").length;
         if (wordCount > 20) {
+          // prettier-ignore
           addSuggestion(sentenceStart, sentenceOffset, `Long sentence! Words = ${wordCount}, Expected <= 20`);
         }
         if (wordCount > 25) {
+          // prettier-ignore
           addSuggestion(sentenceStart, sentenceOffset, `Very long sentence! Words = ${wordCount}, Expected <= 25`);
+        }
+        const wordRegex = / [^ ]+|[^ ]+ /gi;
+        while ((match = wordRegex.exec(sentence)) as unknown as boolean) {
+          const word = match[0].trim();
+          const wordStart = match.index + sentenceStart;
+          const wordOffset = match[0].length;
+          const syllables = syllable(word);
+          if (syllables > 2) {
+            // prettier-ignore
+            addSuggestion(wordStart, wordOffset, `Long word! Syllables = ${syllables}, Expected <= 2`);
+          }
+          if (syllables > 3) {
+            // prettier-ignore
+            addSuggestion(wordStart, wordOffset, `Very long word! Syllables = ${syllables}, Expected <= 3`);
+          }
+          if (WORD_BAN_LIST[word]) {
+            // prettier-ignore
+            addSuggestion(wordStart, wordOffset, `"${word}": ${WORD_BAN_LIST[word]}`);
+          }
         }
       }
     }
