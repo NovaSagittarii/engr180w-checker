@@ -20,6 +20,7 @@ const config: webpack.Configuration = {
     path: join(__dirname, "dist"),
     publicPath: "/",
     filename: "[name].js",
+    clean: true,
   },
   target: "web",
   devtool: "source-map",
