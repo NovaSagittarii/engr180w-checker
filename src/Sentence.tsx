@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { HasKey } from "./HasKey";
 import Word from "./Word";
 import IssueList from "./IssueList";

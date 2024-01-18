@@ -1,3 +1,4 @@
+import React from 'react';
 import { HasKey } from "./HasKey";
 import Sentence from "./Sentence";
 

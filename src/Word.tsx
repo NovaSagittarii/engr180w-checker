@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { syllableCount } from "syllable-count-english"; // breaks in vite build due to reading system files
 
-import { WORD_BAN_LIST } from "./AnnotatedText";
+import { WORD_BAN_LIST } from "./BannedWords";
 import { HasKey } from "./HasKey";
 import { IssueListing } from "./Issue";
 import IssueList from "./IssueList";

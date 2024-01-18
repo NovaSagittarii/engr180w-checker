@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { HasKey } from "./HasKey";
 import IssueList from "./IssueList";
 
@@ -6,7 +6,7 @@ export type Severity = 0 | 1 | 2 | 3;
 interface IssueProps extends HasKey {
   label: string;
   description: string;
-  severity: Severity;
+  severity?: Severity;
 }
 
 const BG_COLORS: Record<Severity, string> = {
@@ -16,7 +16,7 @@ const BG_COLORS: Record<Severity, string> = {
   3: "bg-red-100",
 };
 
-function Issue({ label, description, severity, key }: IssueProps) {
+function Issue({ label, description, severity = 0, key }: IssueProps) {
   const [active, setActive] = useState(true);
   return (
     <div
