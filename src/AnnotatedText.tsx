@@ -105,7 +105,7 @@ function AnnotatedText({ text }: AnnotatedTextProps) {
 
   return (
     <div className='p-4 m-4 w-full flex flex-row gap-4 h-full'>
-      <div className='p-4 flex flex-row w-1/2 flex-wrap font-mono rounded-lg bg-white border border-black/20 overflow-y-scroll'>
+      <div className='p-4 flex flex-row w-1/2 flex-wrap font-mono rounded-lg bg-white border border-black/20 overflow-y-scroll max-h-[90vh]'>
         {text.split("").map((c, index) => (
           <div
             key={index}
