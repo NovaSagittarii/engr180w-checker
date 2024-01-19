@@ -18,7 +18,7 @@ const config: webpack.Configuration = {
   entry: "./src/main.tsx",
   output: {
     path: join(__dirname, "dist"),
-    publicPath: ".",
+    publicPath: ".", // this is / in development, . when built for deployment
     filename: "[name].js",
     clean: true,
   },

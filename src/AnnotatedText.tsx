@@ -26,7 +26,7 @@ function AnnotatedText({ text }: AnnotatedTextProps) {
       });
     }
 
-    const paragraphRegex = /\n[^\n]+|[^\n]+\n/gi;
+    const paragraphRegex = /\n[^\n]+|[^\n]+\n|([^\n]+$)/gi;
     let match: RegExpExecArray;
     while ((match = paragraphRegex.exec(text)) as unknown as boolean) {
       const paragraph = match[0];
