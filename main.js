@@ -96,13 +96,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ 294);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _util_MouseTooltip__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/MouseTooltip */ 817);
-/* harmony import */ var write_good__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! write-good */ 859);
-/* harmony import */ var write_good__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(write_good__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Issue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Issue */ 428);
-/* harmony import */ var syllable__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! syllable */ 858);
-/* harmony import */ var _BannedWords__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./BannedWords */ 132);
-
+/* harmony import */ var write_good__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! write-good */ 859);
+/* harmony import */ var write_good__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(write_good__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Issue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Issue */ 428);
+/* harmony import */ var syllable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! syllable */ 858);
+/* harmony import */ var _BannedWords__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./BannedWords */ 132);
 
 
 
@@ -114,7 +112,7 @@ function AnnotatedText({ text }) {
     const [suggestions, setSuggestions] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
     const [issueCount, setIssueCount] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-        const suggestions = write_good__WEBPACK_IMPORTED_MODULE_2___default()(text);
+        const suggestions = write_good__WEBPACK_IMPORTED_MODULE_1___default()(text);
         function addSuggestion(index, offset, reason) {
             suggestions.push({
                 index,
@@ -127,12 +125,18 @@ function AnnotatedText({ text }) {
         while ((match = paragraphRegex.exec(text))) {
             const paragraph = match[0];
             const paragraphStart = match.index;
+            const paragraphOffset = match[0].length;
             // suggestions.push({
             //   index: match.index,
             //   offset: match[0].length,
             //   reason: "this is a paragraph",
             // });
             const sentenceRegex = /[^.]+./gi;
+            const sentences = paragraph.split(". ").length;
+            if (sentences < 3 || sentences > 5) {
+                // prettier-ignore
+                addSuggestion(paragraphStart, paragraphOffset, `Paragraph sentence count = ${sentences}, Expected >= 3 and <= 5`);
+            }
             while ((match = sentenceRegex.exec(paragraph))) {
                 const sentence = match[0];
                 const sentenceStart = match.index + paragraphStart;
@@ -152,7 +156,7 @@ function AnnotatedText({ text }) {
                     const word = match[0].trim();
                     const wordStart = match.index + sentenceStart;
                     const wordOffset = match[0].length;
-                    const syllables = (0,syllable__WEBPACK_IMPORTED_MODULE_5__.syllable)(word);
+                    const syllables = (0,syllable__WEBPACK_IMPORTED_MODULE_4__.syllable)(word);
                     if (syllables > 2) {
                         // prettier-ignore
                         addSuggestion(wordStart, wordOffset, `Long word! Syllables = ${syllables}, Expected <= 2`);
@@ -161,9 +165,9 @@ function AnnotatedText({ text }) {
                         // prettier-ignore
                         addSuggestion(wordStart, wordOffset, `Very long word! Syllables = ${syllables}, Expected <= 3`);
                     }
-                    if (_BannedWords__WEBPACK_IMPORTED_MODULE_4__.WORD_BAN_LIST[word]) {
+                    if (_BannedWords__WEBPACK_IMPORTED_MODULE_3__.WORD_BAN_LIST[word]) {
                         // prettier-ignore
-                        addSuggestion(wordStart, wordOffset, `"${word}": ${_BannedWords__WEBPACK_IMPORTED_MODULE_4__.WORD_BAN_LIST[word]}`);
+                        addSuggestion(wordStart, wordOffset, `"${word}": ${_BannedWords__WEBPACK_IMPORTED_MODULE_3__.WORD_BAN_LIST[word]}`);
                     }
                 }
             }
@@ -190,11 +194,12 @@ function AnnotatedText({ text }) {
             ][issues];
         }
     }
-    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'flex flex-row w-full max-w-md flex-wrap font-mono' },
-        text.split("").map((c, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { key: index, className: `${WhitespaceRegex.test(c) ? "px-2" : ""} ${issueCountToColor(issueCount[index])} ${index === mouseIndex ? "bg-slate-500" : ""}`, onMouseOver: () => setMouseIndex(index) }, c))),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_util_MouseTooltip__WEBPACK_IMPORTED_MODULE_1__["default"], { offsetY: 10 },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'bg-white p-2 border border-black rounded-md text-black max-w-sm' }, suggestions.map(({ reason, index, offset }, suggestionIndex) => mouseIndex >= index &&
-                mouseIndex <= index + offset && (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Issue__WEBPACK_IMPORTED_MODULE_3__.Issue, { label: '!', description: reason, key: suggestionIndex })))))));
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'p-4 m-4 w-full flex flex-row gap-4 h-full' },
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'p-4 flex flex-row w-1/2 flex-wrap font-mono rounded-lg bg-white border border-black/20 overflow-y-scroll' }, text.split("").map((c, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { key: index, className: `${WhitespaceRegex.test(c) ? "px-2" : ""} ${issueCountToColor(issueCount[index])} ${index === mouseIndex ? "bg-slate-500" : ""}`, onMouseOver: () => setMouseIndex(index) }, c)))),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'p-4 bg-white border border-black/20 rounded-md text-black w-full' },
+            text.split(/\w+/g).length + " words",
+            suggestions.map(({ reason, index, offset }, suggestionIndex) => mouseIndex >= index &&
+                mouseIndex <= index + offset && (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Issue__WEBPACK_IMPORTED_MODULE_2__.Issue, { label: '!', description: reason, key: suggestionIndex }))))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AnnotatedText);
 
@@ -266,10 +271,9 @@ __webpack_require__.r(__webpack_exports__);
 
 function Editor() {
     const [content, setContent] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over. The test will begin on the word start. On your mark, get ready, start.\n");
-    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'm-4 flex flex-col items-center' },
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", { onChange: (event) => setContent(event.target.value), placeholder: "add text to check", className: 'w-full border border-black' }),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'p-4 m-4 rounded-lg bg-white border border-black/20 max-w-screen-md' },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_AnnotatedText__WEBPACK_IMPORTED_MODULE_1__["default"], { text: content }))));
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'm-4 flex flex-col items-center max-h-screen' },
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", { onChange: (event) => setContent(event.target.value), placeholder: "add text to check", className: 'w-full border border-black h-12' }),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_AnnotatedText__WEBPACK_IMPORTED_MODULE_1__["default"], { text: content })));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Editor);
 
@@ -331,73 +335,6 @@ __webpack_require__.r(__webpack_exports__);
 
 react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(document.getElementById("root")).render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), null,
     react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_App__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
-
-
-/***/ }),
-
-/***/ 817:
-/*!***********************************!*\
-  !*** ./src/util/MouseTooltip.tsx ***!
-  \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ 294);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/**
- * https://github.com/marlo22/react-sticky-mouse-tooltip/blob/master/src/MouseTooltip.jsx
- * rewritten by chatgpt :^)
- * https://chat.openai.com/share/58dcf8fb-d1b7-4c18-8b33-449e026099d8
- */
-
-const MouseTooltip = ({ visible = true, children, offsetX = 0, offsetY = 0, className, style, }) => {
-    const [tooltipPosition, setTooltipPosition] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({ xPosition: 0, yPosition: 0 });
-    const [mouseMoved, setMouseMoved] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-    const [listenerActive, setListenerActive] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-    const getTooltipPosition = ({ clientX, clientY }) => {
-        setTooltipPosition({
-            xPosition: clientX,
-            yPosition: clientY,
-        });
-        setMouseMoved(true);
-    };
-    const addListener = () => {
-        window.addEventListener('mousemove', getTooltipPosition);
-        setListenerActive(true);
-    };
-    const removeListener = () => {
-        window.removeEventListener('mousemove', getTooltipPosition);
-        setListenerActive(false);
-    };
-    const updateListener = () => {
-        if (!listenerActive && visible) {
-            addListener();
-        }
-        if (listenerActive && !visible) {
-            removeListener();
-        }
-    };
-    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-        addListener();
-        return () => {
-            removeListener();
-        };
-    }, []);
-    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-        updateListener();
-    }, [visible]);
-    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: className, style: {
-            display: visible && mouseMoved ? 'block' : 'none',
-            position: 'fixed',
-            top: tooltipPosition.yPosition + offsetY,
-            left: tooltipPosition.xPosition + offsetX,
-            ...style,
-        } }, children));
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MouseTooltip);
 
 
 /***/ })
