@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import MouseTooltip from "./util/MouseTooltip";
 import writeGood from "write-good";
 import { Issue } from "./Issue";
 import { syllable } from "syllable";
@@ -32,12 +31,18 @@ function AnnotatedText({ text }: AnnotatedTextProps) {
     while ((match = paragraphRegex.exec(text)) as unknown as boolean) {
       const paragraph = match[0];
       const paragraphStart = match.index;
+      const paragraphOffset = match[0].length;
       // suggestions.push({
       //   index: match.index,
       //   offset: match[0].length,
       //   reason: "this is a paragraph",
       // });
       const sentenceRegex = /[^.]+./gi;
+      const sentences = paragraph.split(". ").length;
+      if (sentences < 3 || sentences > 5) {
+        // prettier-ignore
+        addSuggestion(paragraphStart, paragraphOffset, `Paragraph sentence count = ${sentences}, Expected >= 3 and <= 5`);
+      }
       while ((match = sentenceRegex.exec(paragraph)) as unknown as boolean) {
         const sentence = match[0];
         const sentenceStart = match.index + paragraphStart;
@@ -99,31 +104,32 @@ function AnnotatedText({ text }: AnnotatedTextProps) {
   }
 
   return (
-    <div className='flex flex-row w-full max-w-md flex-wrap font-mono'>
-      {text.split("").map((c, index) => (
-        <div
-          key={index}
-          className={`${
-            WhitespaceRegex.test(c) ? "px-2" : ""
-          } ${issueCountToColor(issueCount[index])} ${
-            index === mouseIndex ? "bg-slate-500" : ""
-          }`}
-          onMouseOver={() => setMouseIndex(index)}
-        >
-          {c}
-        </div>
-      ))}
-      <MouseTooltip offsetY={10}>
-        <div className='bg-white p-2 border border-black rounded-md text-black max-w-sm'>
-          {suggestions.map(
-            ({ reason, index, offset }, suggestionIndex) =>
-              mouseIndex >= index &&
-              mouseIndex <= index + offset && (
-                <Issue label='!' description={reason} key={suggestionIndex} />
-              ),
-          )}
-        </div>
-      </MouseTooltip>
+    <div className='p-4 m-4 w-full flex flex-row gap-4 h-full'>
+      <div className='p-4 flex flex-row w-1/2 flex-wrap font-mono rounded-lg bg-white border border-black/20 overflow-y-scroll'>
+        {text.split("").map((c, index) => (
+          <div
+            key={index}
+            className={`${
+              WhitespaceRegex.test(c) ? "px-2" : ""
+            } ${issueCountToColor(issueCount[index])} ${
+              index === mouseIndex ? "bg-slate-500" : ""
+            }`}
+            onMouseOver={() => setMouseIndex(index)}
+          >
+            {c}
+          </div>
+        ))}
+      </div>
+      <div className='p-4 bg-white border border-black/20 rounded-md text-black w-full'>
+        {text.split(/\w+/g).length + " words"}
+        {suggestions.map(
+          ({ reason, index, offset }, suggestionIndex) =>
+            mouseIndex >= index &&
+            mouseIndex <= index + offset && (
+              <Issue label='!' description={reason} key={suggestionIndex} />
+            ),
+        )}
+      </div>
     </div>
   );
 }
