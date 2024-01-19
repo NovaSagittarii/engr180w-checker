@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import MouseTooltip from "./util/MouseTooltip";
 import writeGood from "write-good";
 import { Issue } from "./Issue";
 import { syllable } from "syllable";
@@ -112,15 +113,17 @@ function AnnotatedText({ text }: AnnotatedTextProps) {
           {c}
         </div>
       ))}
-      <div className='fixed bg-white p-2 border border-black rounded-md text-black'>
-        {suggestions.map(
-          ({ reason, index, offset }, suggestionIndex) =>
-            mouseIndex >= index &&
-            mouseIndex <= index + offset && (
-              <Issue label='!' description={reason} key={suggestionIndex} />
-            ),
-        )}
-      </div>
+      <MouseTooltip offsetY={10}>
+        <div className='bg-white p-2 border border-black rounded-md text-black max-w-sm'>
+          {suggestions.map(
+            ({ reason, index, offset }, suggestionIndex) =>
+              mouseIndex >= index &&
+              mouseIndex <= index + offset && (
+                <Issue label='!' description={reason} key={suggestionIndex} />
+              ),
+          )}
+        </div>
+      </MouseTooltip>
     </div>
   );
 }
