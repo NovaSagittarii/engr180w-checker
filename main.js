@@ -195,7 +195,7 @@ function AnnotatedText({ text }) {
         }
     }
     return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'p-4 m-4 w-full flex flex-row gap-4 h-full' },
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'p-4 flex flex-row w-1/2 flex-wrap font-mono rounded-lg bg-white border border-black/20 overflow-y-scroll' }, text.split("").map((c, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { key: index, className: `${WhitespaceRegex.test(c) ? "px-2" : ""} ${issueCountToColor(issueCount[index])} ${index === mouseIndex ? "bg-slate-500" : ""}`, onMouseOver: () => setMouseIndex(index) }, c)))),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'p-4 flex flex-row w-1/2 flex-wrap font-mono rounded-lg bg-white border border-black/20 overflow-y-scroll max-h-[90vh]' }, text.split("").map((c, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { key: index, className: `${WhitespaceRegex.test(c) ? "px-2" : ""} ${issueCountToColor(issueCount[index])} ${index === mouseIndex ? "bg-slate-500" : ""}`, onMouseOver: () => setMouseIndex(index) }, c)))),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'p-4 bg-white border border-black/20 rounded-md text-black w-full' },
             text.split(/\w+/g).length + " words",
             suggestions.map(({ reason, index, offset }, suggestionIndex) => mouseIndex >= index &&
